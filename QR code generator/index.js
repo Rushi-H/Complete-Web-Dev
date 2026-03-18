@@ -1,10 +1,28 @@
-  var QRCode = require('qrcode')
+import inquirer from "inquirer";
+import  qr from "qr-image"
+import fs from "fs"
 
-  var segs = [
-    { data: 'ABCDEFG', mode: 'alphanumeric' },
-    { data: '0123456', mode: 'numeric' }
-  ]
 
-  QRCode.toDataURL(segs, function (err, url) {
-    console.log(url)
-  })
+inquirer
+.prompt([
+    {
+        message :"type in your URL:",
+        name: "URL",
+    }
+])
+.then((answers) =>{
+    const url = answers.URL;
+    var qr_svg = qr.image(url);
+    qr_svg.pipe(fs.createWriteStream("qr_image.png"));
+    fs.writeFile("URL.txt",url, (err) => {
+        if (err) throw err;
+        console.log("The file ahs been saved!");
+    });
+})
+.catch((error) =>{
+    if(error.isTtyError){
+
+    }else{
+        
+    }
+})
